@@ -4,7 +4,7 @@
   "description": "DOssier permettant d'initier un serveur NodeJS avec des vues HTML",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "Mai Tiron",
   "license": "MIT",
