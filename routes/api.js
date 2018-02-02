@@ -3,23 +3,14 @@ Importer les composants de la route
 */
 const express = require('express');
 const router = express.Router();
-const mySql = require('mysql');
 const bodyParser = require('body-parser');
 //
 
-/*
-Configurer la connexion BDD
-*/
-const connection = mySql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'todoes'
-});
+const mongoose = require('mongoose');
+const mongoServeur = 'mongodb://localhost:27018/blog';
 
-/*
-Définition des routes
-*/
+
+
     router.use(bodyParser.json());
     router.use(bodyParser.urlencoded({extented:false}));
 
@@ -29,32 +20,56 @@ Définition des routes
 Définition des routes
 */
 router.get('/', (req, res) => {
-            //Ouvrir la connexion a la bdd
-            connection.connect();
             //Renvoyer un flux JSON dans la réponse
-            res.json({
-                content: 'Hello API'
-            });
+            res.json({content: 'Hello API'});
 });
 
-router.post('/tasks', (req, res) => {
-    //Ouvrir la connexion a la bdd
-    console.log(req.body);
-    connection.query(`INSERT INTO tasks (content, category, isDone) 
-    VALUES (${req.body.newTaskContent}, ${req.body.newTaskType}, "false"`))
-
-    (error, results, fields) => {
-        if(error){
-            res.json({content:error})
-            
+router.post('/posts', (req, res) => {
+   //Connexion a la base de données MongoDB
+    mongoose.connect(mongoServeur, (err, db)=>{
+        //Tester la connexion à la BDD
+        if(err){
+            res.json({error:err});
         }else{
-            res.json ({content: error, results, fields})
-        }
-    }
+            //Connexion ouverte : récupérer la collection de données
+            db.collection('posts').find().toArray((err, collection)=>{
+                //Tester la connexion à la collection
+                if(err){
+                    res.json({error:err});
+                }else{
+                    res.json(collection);
+                }
+            });
+        };
+        //Fermer la connexion
+        db.close();
+    });
 });
-            //
-            /*
-            Exporter le module de route
-            */
-            module.exports = router;
-            //
+
+router.post('/add-post', (req, res) => {
+        console.log(req.body);
+        mongoose.connect(mongoServeur, (err, db)=>{
+        //Tester la connexion à la BDD
+        if(err){res.render('add-post', {msg: newObject})}
+        else{
+            db.collection('posts').insert({
+                title:req.body.title,
+                content:req.body.content,
+                type:req.body.type
+            }, (err, newObject)=>{
+                if(err) {res.render('add-post', {msg:err})}
+                else{
+                    res.render('add-post', {msg: newObject})
+                }
+            });
+        };
+        //Fermer la connexion
+        db.close();
+    });
+});
+//
+/*
+Exporter le module de route
+*/
+module.exports = router;
+//

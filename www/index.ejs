@@ -6,32 +6,22 @@
     <meta name="viewport" content="">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
 </head>
 
 <body>
     <header>
-        <h1>Taches</h1>
+        <h1>Hello Nodejs</h1>
     </header>
     <main>
-        <h2>Liste des taches</h2>
-        <ul id="tasksList">
-            
-        </ul>
-        
-        <form action="http://localhost:3000/api/tasks" method="POST" id="addTaskForm">
-            <input type="text" name="newTaskContent">
-            <select name="newTaskContent">
-                <option value="WORK">Travail</option>
-                <option value="LIFE">Loisir</option>
-            </select>
-            <button type="submit">Ajouter une tache</button>
-        </form>
+        <!--Faire une boucle sur la collection de données-->
+        <% for(let item of data) {%>
+            <article>
+                <h2><%= item.title %><b><%= item.type %></b></h2>
+                <p><%= item.content %></p>
+            </article>
+        <% } %>
     </main>
-    <footer>Au revoir</footer>
-    
-    <script src="js/script.js"></script>
+    <footer></footer>
 </body>
 
 </html>

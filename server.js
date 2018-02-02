@@ -9,6 +9,7 @@ Importer les composants serveur
     //Modules
     const frontRoute = require('./routes/front');
     const apiRoute = require('./routes/api');
+    const userRoute = require('./routes/user');
 //
 /*
 Initialiser le serveur
@@ -24,8 +25,9 @@ Initialiser le serveur
     //Routes - app utilise la route créée
     app.use('/', frontRoute);
     app.use('/api', apiRoute);
+    app.use('/user', userRoute);
 
-    app.engine('html', ejs.renderFile);
+    app.engine('ejs', ejs.renderFile);
     app.set('view engine', 'ejs');
 //
 /*Lancer le serveur
